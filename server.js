@@ -35,8 +35,14 @@ async function responderIA(mensaje){
 
   const data = await r.json();
 
-  // 👇 lectura simple y segura del texto generado
-  const texto = data.output_text || "🙂";
+  console.log("RESPUESTA IA RAW:", JSON.stringify(data));
+
+  // ✅ lectura REAL del texto generado
+  let texto = "🙂";
+
+  if(data.output_text){
+    texto = data.output_text;
+  }
 
   return texto;
 }
@@ -46,7 +52,7 @@ app.post("/chat", async (req,res)=>{
 
   try{
 
-    const mensaje = req.body.mensaje || "";
+    const mensaje = req.body.message || req.body.mensaje || "";
 
     const respuesta = await responderIA(mensaje);
 
