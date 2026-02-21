@@ -36,7 +36,7 @@ async function responderIA(mensaje){
   const data = await r.json();
 
   // 👇 devuelve texto generado por la IA
-  return data.output[0].content[0].text;
+ return data.output_text || "🙂";
 }
 
 // ======================
@@ -63,4 +63,5 @@ app.post("/chat", async (req,res)=>{
 app.listen(3000,()=>{
   console.log("🚀 Sigma IA REAL activa");
 });
+
 
