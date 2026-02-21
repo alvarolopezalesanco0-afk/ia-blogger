@@ -2,11 +2,13 @@ import express from "express";
 import cors from "cors";
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
+// 🧠 Personalidad Sigma
 const systemPrompt = `
-Sos una guía clara en español.
+Sos Sigma, una guía clara en español.
 Respondés:
 - corto (máx 3 líneas)
 - simple
@@ -14,9 +16,11 @@ Respondés:
 - con emojis suaves 🙂👍
 `;
 
+// ======================
+// 🤖 llamada a la IA real
 async function responderIA(mensaje){
 
-  const r = await fetch("https://api.openai.com/v1/chat/completions",{
+  const r = await fetch("https://api.openai.com/v1/responses",{
     method:"POST",
     headers:{
       "Content-Type":"application/json",
@@ -24,17 +28,17 @@ async function responderIA(mensaje){
     },
     body: JSON.stringify({
       model:"gpt-5.2",
-      messages:[
-        { role:"system", content: systemPrompt },
-        { role:"user", content: mensaje }
-      ]
+      input: systemPrompt + "\nUsuario: " + mensaje
     })
   });
 
   const data = await r.json();
-  return data.choices[0].message.content;
+
+  // 👇 devuelve texto generado por la IA
+  return data.output[0].content[0].text;
 }
 
+// ======================
 app.post("/chat", async (req,res)=>{
 
   try{
@@ -47,12 +51,14 @@ app.post("/chat", async (req,res)=>{
 
   }catch(e){
 
+    console.log("ERROR IA:", e);
     res.json({ respuesta:"Ups 😅 hubo un problema. Probá otra vez." });
 
   }
+
 });
 
+// ======================
 app.listen(3000,()=>{
-  console.log("IA REAL activa 🚀");
+  console.log("🚀 Sigma IA REAL activa");
 });
-
