@@ -1,6 +1,6 @@
-import fetch from "node-fetch";
 import express from "express";
 import cors from "cors";
+import fetch from "node-fetch";
 
 const app = express();
 
@@ -35,8 +35,13 @@ async function responderIA(mensaje){
 
   const data = await r.json();
 
-  // 👇 devuelve texto generado por la IA
- return data.output_text || "🙂";
+  // 👇 lectura segura del texto generado
+  const texto =
+    data.output_text ||
+    data.output?.[0]?.content?.[0]?.text ||
+    "🙂";
+
+  return texto;
 }
 
 // ======================
@@ -63,5 +68,3 @@ app.post("/chat", async (req,res)=>{
 app.listen(3000,()=>{
   console.log("🚀 Sigma IA REAL activa");
 });
-
-
