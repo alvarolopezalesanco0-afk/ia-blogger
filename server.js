@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import express from "express";
 import cors from "cors";
 
@@ -62,3 +63,4 @@ app.post("/chat", async (req,res)=>{
 app.listen(3000,()=>{
   console.log("🚀 Sigma IA REAL activa");
 });
+
