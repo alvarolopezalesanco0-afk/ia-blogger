@@ -36,12 +36,17 @@ async function responderIA(mensaje){
   const data = await r.json();
 
   // 👇 lectura segura del texto generado
- const texto =
-  data.output_text ||
-  data.output?.map(o =>
-    o.content?.map(c => c.text).join("")
-  ).join("") ||
-  "🙂";
+ let texto = "🙂";
+
+if (data.output && data.output.length > 0) {
+  const contenido = data.output[0].content;
+  if (contenido && contenido.length > 0) {
+    texto = contenido
+      .filter(c => c.type === "output_text")
+      .map(c => c.text)
+      .join("");
+  }
+}
 
   return texto;
 }
@@ -70,4 +75,5 @@ app.post("/chat", async (req,res)=>{
 app.listen(3000,()=>{
   console.log("🚀 Sigma IA REAL activa");
 });
+
 
